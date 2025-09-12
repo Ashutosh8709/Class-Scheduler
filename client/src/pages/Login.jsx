@@ -8,9 +8,9 @@ function Login() {
   const navigate = useNavigate();
   const { login, isLoading, isAuthenticated, user } = useAuth();
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
-    role: "",
+    role: "admin",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -80,22 +80,22 @@ function Login() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
-              htmlFor="user Id"
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              User ID
+              University Email
             </label>
             <div className="relative">
               <input
-                id="user Id"
-                name="user Id"
+                id="email"
+                name="email"
                 type="text"
                 required
-                value={formData.username}
+                value={formData.email}
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
-                    username: e.target.value,
+                    email: e.target.value,
                   }));
                 }}
                 className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"

@@ -5,8 +5,9 @@ require("dotenv").config();
 
 const login = async (req, res) => {
   try {
-    const { regId, password, role } = req.body;
-    const user = await UserModel.findOne({ regId, role });
+    console.log("Login request body:", req.body);
+    const { email, password, role } = req.body;
+    const user = await UserModel.findOne({ email, role });
     if (!user) {
       return res.json({
         message: "User Does not Exist",
@@ -16,17 +17,17 @@ const login = async (req, res) => {
     const isPasswordEqual = (await password) === user.password;
     // const isPasswordEqual=await bcrypt.compare(password,user.password);
     if (!isPasswordEqual) {
-      res.json({
+      return res.json({
         message: "Password is wrong",
         success: false,
       });
     }
     const jwtToken = jwt.sign(
-      { username, _id: user._id },
+      { email, _id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
-    res.json({
+    return res.json({
       message: "Login success",
       success: true,
       userId: user.id,
@@ -35,7 +36,7 @@ const login = async (req, res) => {
       name: user.name,
     });
   } catch (err) {
-    res.json({
+    return res.json({
       message: err.message,
       success: false,
     });

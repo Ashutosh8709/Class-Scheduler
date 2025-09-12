@@ -3,10 +3,11 @@ import axios from "axios";
 import { handleSuccess, handleError } from "../utils";
 
 const AuthContext = createContext(undefined);
+const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isloading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getUser = localStorage.getItem("user");
@@ -16,13 +17,13 @@ export const AuthContextProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (regId, password, userRole) => {
+  const login = async (email, password, userRole) => {
     try {
       setIsLoading(true);
-      const res = await axios.post("/api/auth/login", {
-        regId,
+      const res = await axios.post(`${API_URL}/auth/login`, {
+        email,
         password,
-        userRole,
+        role: userRole,
       });
 
       const { success, message, userId, error, name, token, role } = res.data;
@@ -55,7 +56,7 @@ export const AuthContextProvider = ({ children }) => {
     user,
     login,
     logout,
-    isloading,
+    isLoading,
     isAuthenticated: !!user,
   };
 
